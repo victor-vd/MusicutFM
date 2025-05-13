@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.victorvd.musicutfm.service.LastFMService;
 import com.victorvd.musicutfm.service.MusicutFMService;
 
 
@@ -13,16 +14,15 @@ import com.victorvd.musicutfm.service.MusicutFMService;
 public class MusicutFMController {
 
     @Autowired
-    LastFMController api = new LastFMController();
+    MusicutFMService apiAuth = new MusicutFMService();
+    LastFMService apiRequest = new LastFMService();
 
 
     @GetMapping("/apitest")
     public Object welcome() {
-        MusicutFMService apiRequest = new MusicutFMService();
-        
-        String key = apiRequest.getAPIKey();
+        String key = apiAuth.getAPIKey();
 
-        return api.getTrackGeneric(key, "duration", "cher", "believe");
+        return apiRequest.getTrackGeneric(key, "duration", "cher", "believe");
         // return api.getTrackImage("image", 3, "cher", "believe");
     }
 }

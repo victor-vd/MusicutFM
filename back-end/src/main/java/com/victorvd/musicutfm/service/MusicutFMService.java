@@ -4,7 +4,16 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MusicutFMService {
+    
     public String getAPIKey () {
-        return "522d7d17efba9a3dd4d6c40de961486a";
+        String apiKey = System.getenv("MUSICUTFM_API_KEY");
+        System.out.println(apiKey);
+
+        if (apiKey == null || apiKey.isEmpty()) {
+            System.out.println("Error: API key is not set in the environment variables.");
+            return null;
+        } else {
+            return apiKey;
+        }
     }
 }
