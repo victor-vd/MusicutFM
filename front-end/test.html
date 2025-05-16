@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <br>
+
+    <button onclick="createVideo()">create</button>
+    <br>
+    <h3>
+        lastfm
+    </h3>
+
+    <textarea name="track" id="track"></textarea>
+    <textarea name="artist" id="artist"></textarea>
+
+    <div id="lastfmResult">
+        result
+    </div>
+
+    <button onclick="document.getElementById('lastfmResult').innerHTML = '';
+        getLastFMResponse(document.getElementById('track'),
+        document.getElementById('artist'),
+        document.getElementById('lastfmResult')
+    )">search</button>
+    <br>
+    <h3>
+        youtube
+    </h3>
+    <br>
+    <textarea name="search" id="search"></textarea>
+
+    <div id="youtubeResult">
+        result
+    </div>
+
+    <button onclick="getYTResponse(
+        document.getElementById('search'),
+        document.getElementById('youtubeResult')
+    )">search</button>
+
+    <script src="./script.js"></script>
+</body>
+
+</html>
