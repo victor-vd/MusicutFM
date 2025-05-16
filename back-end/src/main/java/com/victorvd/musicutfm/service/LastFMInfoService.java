@@ -61,7 +61,8 @@ public class LastFMInfoService{
             try {
                 JSONObject imageData = getTrackData(key, trackMbid).getJSONObject("album");
                 
-                return imageData.getJSONArray("image").getJSONObject(-1).getString("#text");
+                org.json.JSONArray imageArray = imageData.getJSONArray("image");
+                return imageArray.getJSONObject(imageArray.length() - 1).getString("#text");
                      
             } catch (JSONException e) {
                 System.out.println("Error: Invalid JSON structure or attribute not found - " + e.getMessage());

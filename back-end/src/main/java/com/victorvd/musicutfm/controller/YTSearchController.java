@@ -22,8 +22,9 @@ public class YTSearchController {
     }
 
     @GetMapping("/YTsearch")
-    public ResponseEntity<String> search(@RequestParam String searchParameter) {
-        String result = youTubeService.searchVideos(key, searchParameter, 5);
+    public ResponseEntity<String> search(@RequestParam String query) {
+        String result = youTubeService.searchVideos(key, query, 5);
+        System.out.println(query);
         System.out.println(result);
         return ResponseEntity.ok(result);
     }

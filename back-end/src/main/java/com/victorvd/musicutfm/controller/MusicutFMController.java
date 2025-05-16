@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.victorvd.musicutfm.service.FileHandlerService;
 import com.victorvd.musicutfm.service.LastFMImageService;
 import com.victorvd.musicutfm.service.LastFMInfoService;
 import com.victorvd.musicutfm.service.LastFMSearchService;
@@ -32,7 +33,9 @@ public class MusicutFMController {
 
     private final LastFMSearchService lastFMSearchService;
 
-    public MusicutFMController(LastFMInfoService lastFMInfoService, LastFMSearchService lastFMSearchService, LastFMImageService lastFMImageService) {
+    public MusicutFMController(LastFMInfoService lastFMInfoService, 
+                                LastFMSearchService lastFMSearchService, 
+                                LastFMImageService lastFMImageService) {
         this.lastFMInfoService = lastFMInfoService;
         this.lastFMSearchService = lastFMSearchService;
         this.lastFMImageService = lastFMImageService;
@@ -46,21 +49,46 @@ public class MusicutFMController {
     }
 
     @GetMapping("/lastfmSearch")
-    public ResponseEntity<String> searchLastFM(@RequestParam String track) {
-        String result = lastFMSearchService.searchLastFM(key, track);
+    public ResponseEntity<String> lastFMSearch(@RequestParam String track, @RequestParam String artist) {
+        String result = lastFMSearchService.searchLastFMArtist(key, track, artist);
         System.out.println(result);
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/musicutfm/create")
-    public void musicutFMCreate(@RequestParam String trackMbid, @RequestParam String videoID) {
+    public ResponseEntity<String> musicutFMCreate(@RequestParam String trackMbid, @RequestParam String videoID) {
         String imageURL = lastFMInfoService.getTrackImage(key, trackMbid);
-        
+
+        System.out.println(imageURL);
+
         try {
-            lastFMImageService.downloadCover(key, imageURL);
-        } catch (IOException e) {
-            // Log the error or handle it appropriately
-            System.err.println("Error downloading cover: " + e.getMessage());
+            FileHandlerService fileHandlerService = new FileHandlerService();
+            fileHandlerService.downloadMp4(videoID);
+        } catch (Exception e) {
+            System.err.println("Error downloading music video: " + e.getMessage());
+            e.printStackTrace();
+            return null;
         }
+
+        try {
+            lastFMImageService.downloadCover(imageURL, videoID);
+        } catch (IOException e) {
+            System.err.println("Error downloading cover: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+
+        try {
+            FileHandlerService fileHandlerService = new FileHandlerService();
+            fileHandlerService.downloadMusic(videoID);
+        } catch (Exception e) {
+            System.err.println("Error downloading audio file: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+
+        String htmlImageLink = "<img src=\"" + imageURL + "\" alt=\"Track Cover\" />";
+        System.out.println(imageURL);
+        return ResponseEntity.ok(htmlImageLink);
     }
 }

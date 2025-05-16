@@ -37,13 +37,10 @@ public class FileHandlerController {
         }
     }
 
-
-    @GetMapping("/download/{fileName}")
-    public ResponseEntity<Resource> downloadVideoFile(
-            @PathVariable String fileName) {
-
+    @GetMapping("/download/{fileType}/{fileName}")
+    public ResponseEntity<Resource> downloadVideoFile(@PathVariable String fileType, @PathVariable String fileName) {
         try {
-            Path filePath = Paths.get(BASE_DIR)
+            Path filePath = Paths.get(BASE_DIR+"/"+fileType)
                     .resolve(fileName)
                     .normalize();
 

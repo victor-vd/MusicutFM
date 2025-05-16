@@ -19,7 +19,7 @@ public class YTSearchService {
                 .uri(uriBuilder -> uriBuilder
                         .path("/search")
                         .queryParam("part", "snippet")
-                        .queryParam("q", query)
+                        .queryParam("query", query)
                         .queryParam("maxResults", maxResults)
                         .queryParam("type", "video")
                         .queryParam("key", API_KEY)
